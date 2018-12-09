@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "hello world",
+      "invocationName": "my day",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -17,11 +17,25 @@
         },
         {
           "name": "HelloWorldIntent",
+          "slots": [],
           "samples": [
             "hello"
           ]
+        },
+        {
+          "name": "story_intent",
+          "slots": [
+            {
+              "name": "story",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "sarah {story}"
+          ]
         }
-      ]
+      ],
+      "types": []
     }
   }
 }
