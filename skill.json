@@ -3,20 +3,27 @@
     "publishingInformation": {
       "locales": {
         "en-US": {
-          "name": "My Day"
+          "summary": "Sample Short Description",
+          "examplePhrases": [
+            "Alexa open hello world",
+            "hello",
+            "help"
+          ],
+          "name": "my-day",
+          "description": "Sample Full Description"
         }
-      }
+      },
+      "isAvailableWorldwide": true,
+      "testingInstructions": "Sample Testing Instructions.",
+      "category": "KNOWLEDGE_AND_TRIVIA",
+      "distributionCountries": []
     },
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "arn:aws:lambda:us-east-1:083357008544:function:380dd930-1432-4afd-92f2-1bce199f7586:Release_0"
-        },
-        "interfaces": [
-          {
-            "type": "ALEXA_PRESENTATION_APL"
-          }
-        ]
+          "sourceDir": "lambda/custom",
+          "uri": "ask-custom-my-day-default"
+        }
       }
     },
     "manifestVersion": "1.0"
