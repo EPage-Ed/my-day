@@ -16,16 +16,20 @@
           "samples": []
         },
         {
-          "name": "HelloWorldIntent",
-          "slots": [],
+          "name": "MyDayIntent",
+          "slots": [
+            {
+              "name": "story",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
           "samples": [
+            "Sarah {story}",
             "hello",
-            "how are you",
-            "say hi world",
-            "say hi",
+            "i'm home",
             "hi",
-            "say hello world",
-            "say hello"
+            "i'm back",
+            "yo"
           ]
         }
       ],
