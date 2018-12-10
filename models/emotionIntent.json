@@ -1,0 +1,166 @@
+{
+    "type": "APL",
+    "version": "1.0",
+    "theme": "dark",
+    "import": [
+        {
+            "name": "alexa-viewport-profiles",
+            "version": "1.0.0"
+        },
+        {
+            "name": "alexa-layouts",
+            "version": "1.0.0"
+        },
+        {
+            "name": "alexa-styles",
+            "version": "1.0.0"
+        }
+    ],
+    "resources": [
+        {
+            "description": "Sara image assets",
+            "strings": {
+                "great": "https://image.flaticon.com/icons/svg/156/156007.svg",
+                "tired": "https://image.flaticon.com/icons/svg/156/156001.svg",
+                "terrible": "https://image.flaticon.com/icons/svg/156/156005.svg",
+                "bored": "https://image.flaticon.com/icons/svg/155/155983.svg",
+                "bg-yellow": "https://www.publicdomainpictures.net/pictures/280000/velka/yellow-textured-background-1538801126QUC.jpg",
+                "bg-red": "https://www.publicdomainpictures.net/pictures/210000/velka/red-wallpaper-background.jpg",
+                "bg-blue": "https://www.publicdomainpictures.net/pictures/200000/velka/plain-blue-background.jpg",
+                "bg-green": "https://www.publicdomainpictures.net/pictures/200000/velka/plain-green-background.jpg",
+                "skillIcon": "http://www.iconsalot.com/asset/icons/freepik/psychology/512/020-psychology-4-icon.png"
+            }
+        }
+    ],
+    "layouts": {
+        "EmotionItem": {
+            "parameters": [
+                {
+                    "name": "imgSrc",
+                    "type": "string"
+                },
+                {
+                    "name": "emotion",
+                    "type": "string"
+                }
+            ],
+            "items": [
+                {
+                    "type": "TouchWrapper",
+                    "id": "touch-${emotion}",
+                    "item": {
+                        "type": "Container",
+                        "direction": "column",
+                        "width": "100vw",
+                        "height": "45vh",
+                        "alignItems": "center",
+                        "items": [
+                            {
+                                "type": "Image",
+                                "source": "${imgSrc}",
+                                "width": "28vh",
+                                "borderRadius": "0",
+                                "height": "28vh",
+                                "scale": "best-fill"
+                            },
+                            {
+                                "type": "Text",
+                                "text": "${emotion}!",
+                                "width": "25vw",
+                                "height": "10vh",
+                                "paddingTop": "2vh",
+                                "fontSize": "30dp",
+                                "fontWeight": "400",
+                                "fontFamily": "Amazon Ember Display",
+                                "textAlign": "center"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "mainTemplate": {
+        "parameters": [
+            "payload"
+        ],
+        "items": [
+            {
+                "type": "Container",
+                "direction": "column",
+                "items": [
+                    {
+                        "type": "Image",
+                        "source": "@bg-${payload.convoData.properties.bgColor}",
+                        "scale": "best-fill",
+                        "width": "100vw",
+                        "height": "100vh"
+                    },
+                    {
+                        "type": "Container",
+                        "position": "absolute",
+                        "width": "100vw",
+                        "height": "100vh",
+                        "direction": "column",
+                        "justifyContent": "spaceAround",
+                        "alignItems": "center",
+                        "items": [
+                            {
+                              "type": "Container",
+                              "width": "100vw",
+                              "height": "20vh",
+                              "justifyContent": "end",
+                              "alignItems": "center",
+                              "items": [
+                                    {
+                                        "type": "Text",
+                                        "fontFamily": "Amazon Ember Display",
+                                        "fontSize": "40",
+                                        "fontWeight": "600",
+                                        "letterSpacing": "4",
+                                        "text": "TALK TO SARA?",
+                                        "position": "relative"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "Container",
+                                "width": "100vw",
+                                "height": "50vh",
+                                "direction": "column",
+                                "alignItems": "center",
+                                "justifyContent": "center",
+                                "items": [
+                                    {
+                                        "type": "Container",
+                                        "width": "100vw",
+                                        "height": "50vh",
+                                        "direction": "column",
+                                        "justifyContent": "center",
+                                        "alignItems": "center",
+                                        "items": [
+                                            {
+                                                "type": "EmotionItem",
+                                                "emotion": "${payload.convoData.properties.currentEmotion}",
+                                                "imgSrc": "@${payload.convoData.properties.currentEmotion}"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "when": "${@viewportProfile == @hubLandscapeMedium || @viewportProfile == @hubLandscapeLarge || @viewportProfile == @tvLandscapeXLarge}",
+                                "type": "Text",
+                                "fontFamily": "Amazon Ember Display",
+                                "fontSize": "30",
+                                "fontStyle": "italic",
+                                "color": "darkGray",
+                                "text": "${payload.convoData.properties.hintString}"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

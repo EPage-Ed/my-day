@@ -3,7 +3,7 @@
 
 
 const Alexa = require('ask-sdk');
-
+const aws = require('aws-sdk');
 const constants = require('./constants.js');
 const helpers = require('./helpers.js');
 const interceptors = require('./interceptors.js');
@@ -31,11 +31,12 @@ const LaunchRequestHandler = {
 
     // let convCount = "third";
     const speechText = 'Hello Ed, this is Sarah. This is our '+convCount+' conversation. How was your day?';
+    // const speechText = 'Hello Ed, this is Sarah. How was your day?';
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt("Are you still there?  How was your day?")
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard('My Day', speechText)
       .getResponse();
   },
 };
@@ -51,7 +52,7 @@ const HelloWorldIntentHandler = {
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt("Are you there? "+speechText)
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard('My Day', speechText)
       .getResponse();
   },
 };
@@ -59,8 +60,31 @@ const HelloWorldIntentHandler = {
 
 
 function analyzeText(text) {
+  var lambda = new aws.Lambda({
+    region: 'arn:aws:lambda:us-east-1:484197412085:function:myDayFunction'
+  });    
+  var params = {
+    FunctionName: "myDayFunction", 
+    InvocationType: "RequestResponse", 
+    LogType: "Tail", 
+    payload: text
+//    Payload: "<Stringified oject to pass parameters as event>"
+  };
 
+//  return;
+
+  lambda.invoke(params, function(err, data) {
+    if (err) {
+      console.log(err, err.stack); // an error occurred
+    } else {
+      console.log(data);           // successful response
+    }
+  });
+  
 }
+
+
+
 
 const StoryIntentHandler = {
   canHandle(handlerInput) {
@@ -98,18 +122,46 @@ const StoryIntentHandler = {
     }
 */
 
+    analyzeText(speech);
 
+    var speechText = 'Tell me more about '+speech;
+    var done = false;
+    if (speech.search("hackathon") > -1) {
+      speechText = "Congratulations!  Sounds like your day was good after all.  Let's celebrate."
+      done = true;
+    }
 
-
-
-
-    const speechText = 'Tell me more about '+speech;
+    if (done) {
+      return handlerInput.responseBuilder
+      .speak(speechText)
+      .withSimpleCard('My Day', speechText)
+      .getResponse();
+    }
 
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt("Are you there? "+speechText)
-      .withSimpleCard('Hello World', speechText)
-      .getResponse();
+      .withSimpleCard('My Day', speechText)
+    //   .addDirective({
+    //     type: 'Alexa.Presentation.APL.RenderDocument',
+    //     version: '1.0',
+    //    document: require('./models/emotionIntent.json'),
+    //     datasources: {
+    //         "convoData": {
+    //             "type": "object",
+    //             "properties": {
+    //                 "currentEmotion": "terrible",
+    //                 "bgColor": "yellow",
+    //                 "hintString": "My day was great!"
+    //             },
+    //             "transformers": [{
+    //                 "inputPath": "hintString",
+    //                 "transformer": "textToHint"
+    //             }]
+    //         }
+    //     }
+    // })
+          .getResponse();
   },
 };
 
@@ -125,7 +177,7 @@ const HelpIntentHandler = {
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard('My Day', speechText)
       .getResponse();
   },
 };
@@ -141,7 +193,7 @@ const CancelAndStopIntentHandler = {
 
     return handlerInput.responseBuilder
       .speak(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard('My Day', speechText)
       .getResponse();
   },
 };
@@ -171,7 +223,7 @@ const ErrorHandler = {
   },
 };
 
-const skillBuilder = Alexa.SkillBuilders.custom();
+const skillBuilder = Alexa.SkillBuilders.standard();
 
 exports.handler = skillBuilder
   .addRequestHandlers(
@@ -191,7 +243,7 @@ exports.handler = skillBuilder
   .addResponseInterceptors(interceptors.SpeechOutputInterceptor)
 
 
-  .withTableName(DYNAMODB_TABLE)
-//  .withAutoCreateTable(true)
+ .withTableName(DYNAMODB_TABLE)
+ .withAutoCreateTable(true)
 
   .lambda();

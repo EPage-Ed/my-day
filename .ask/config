@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "ask-custom-my-day-default",
             "handler": "index.handler",
-            "revisionId": "ec1e3fae-cc76-4ad4-b276-50247a5667e0",
+            "revisionId": "b6151c7e-f26d-49a6-b10a-196e36648f96",
             "runtime": "nodejs8.10"
           }
         ]
